@@ -89,7 +89,7 @@ END:VCARD`;
           {/* 1. Header Section */}
           <motion.section variants={itemVariants} className="flex flex-col items-center text-center gap-6">
             <div className="relative">
-              <div className="w-32 h-32 rounded-full border border-white/10 p-1 bg-black shadow-[0_0_40px_rgba(255,0,0,0.1)]">
+              <div className="w-40 h-40 rounded-full border border-white/10 p-1 bg-black shadow-[0_0_40px_rgba(255,0,0,0.1)]">
                 <img 
                   src="/jrbrandt-foto.png" 
                   alt="Roberto Brandt"
