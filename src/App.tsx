@@ -63,7 +63,7 @@ export default function App() {
           'URL:https://portfolio-jrbrandt.vercel.app/',
           'X-SOCIALPROFILE;TYPE=instagram:https://www.instagram.com/jrbrandt.webdesigner/',
           'X-SOCIALPROFILE;TYPE=linkedin:https://www.linkedin.com/in/jos%C3%A9-roberto-machado-brandt-1a424460',
-          'NOTE:Crio sites e sistemas que ajudam pequenos negócios a atrair e reter mais clientes.',
+          'NOTE:Crio sites e sistemas que ajudam empresas a atrair e reter mais clientes.',
           'END:VCARD'
         ].join('\r\n');
 
@@ -122,7 +122,7 @@ export default function App() {
                 Seu negócio merece mais do que apenas redes sociais <span className="text-accent">ou plataformas de terceiros.</span>
               </h1>
               <p className="text-white/60 text-base leading-relaxed font-medium">
-                Como Webdesigner, crio sites e sistemas sob medida para ajudar pequenos negócios a atrair e reter mais clientes qualificados.
+                Como Webdesigner, crio sites e sistemas sob medida para ajudar empresas a atrair e reter mais clientes qualificados.
               </p>
             </div>
           </motion.section>

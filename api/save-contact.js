@@ -11,7 +11,7 @@ export default function handler(req, res) {
     'URL:https://portfolio-jrbrandt.vercel.app/',
     'X-SOCIALPROFILE;TYPE=instagram:https://www.instagram.com/jrbrandt.webdesigner/',
     'X-SOCIALPROFILE;TYPE=linkedin:https://www.linkedin.com/in/jos%C3%A9-roberto-machado-brandt-1a424460',
-    'NOTE:Crio sites e sistemas que ajudam pequenos negócios a atrair e reter mais clientes.',
+    'NOTE:Crio sites e sistemas que ajudam empresas a atrair e reter mais clientes.',
     'END:VCARD'
   ].join('\r\n');
 
