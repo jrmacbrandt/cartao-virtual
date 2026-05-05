@@ -133,7 +133,7 @@ END:VCARD`;
             />
             <ActionButton 
               icon={<Mail className="w-4 h-4" />} 
-              label="E-mail" 
+              label="Email" 
               href="mailto:jrmacbrandt@yahoo.com"
             />
           </motion.section>
