@@ -169,8 +169,8 @@ END:VCARD`;
           {/* 6. Social Section */}
           <motion.section variants={itemVariants} className="flex flex-col items-center gap-8 mt-4">
             <div className="flex gap-8">
-              <SocialIcon icon={<Instagram className="w-5 h-5" />} href="#" />
-              <SocialIcon icon={<Linkedin className="w-5 h-5" />} href="#" />
+              <SocialIcon icon={<Instagram className="w-5 h-5" />} href="https://www.instagram.com/jrbrandt.webdesigner/" />
+              <SocialIcon icon={<Linkedin className="w-5 h-5" />} href="https://www.linkedin.com/in/josé-roberto-machado-brandt-1a424460" />
               <SocialIcon icon={<Facebook className="w-5 h-5" />} href="#" />
             </div>
           </motion.section>
