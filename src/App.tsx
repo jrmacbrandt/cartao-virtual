@@ -42,26 +42,8 @@ export default function App() {
   };
 
   const handleSaveContact = async () => {
-    const vCardData = [
-      'BEGIN:VCARD',
-      'VERSION:3.0',
-      'FN:Roberto Brandt',
-      'N:Brandt;Roberto;;;',
-      'ORG:J.R. Brandt Web Design',
-      'TITLE:Webdesigner & Developer',
-      'TEL;TYPE=CELL,PREF:+5521980914107',
-      'EMAIL;TYPE=INTERNET,WORK:jrmacbrandt@yahoo.com',
-      'URL:https://portfolio-roberto-five.vercel.app/',
-      'X-SOCIALPROFILE;TYPE=instagram:https://www.instagram.com/jrbrandt.webdesigner/',
-      'X-SOCIALPROFILE;TYPE=linkedin:https://www.linkedin.com/in/jos%C3%A9-roberto-machado-brandt-1a424460',
-      'NOTE:Crio sites e sistemas que ajudam pequenos negócios a atrair e reter mais clientes.',
-      'REV:' + new Date().toISOString().replace(/[:.-]/g, '').slice(0, 15) + 'Z',
-      'END:VCARD'
-    ].join('\r\n');
-
     const fileName = 'Roberto_Brandt.vcf';
-    const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8' });
-
+    
     // Detection
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || isIOS;
@@ -69,7 +51,26 @@ export default function App() {
     // 1. Try Web Share API (Best experience on modern Mobile)
     if (isMobile && navigator.share) {
       try {
+        const vCardData = [
+          'BEGIN:VCARD',
+          'VERSION:3.0',
+          'FN:Roberto Brandt',
+          'N:Brandt;Roberto;;;',
+          'ORG:J.R. Brandt Web Design',
+          'TITLE:Webdesigner & Developer',
+          'TEL;TYPE=CELL,PREF:+5521980914107',
+          'EMAIL;TYPE=INTERNET,WORK:jrmacbrandt@yahoo.com',
+          'URL:https://portfolio-roberto-five.vercel.app/',
+          'X-SOCIALPROFILE;TYPE=instagram:https://www.instagram.com/jrbrandt.webdesigner/',
+          'X-SOCIALPROFILE;TYPE=linkedin:https://www.linkedin.com/in/jos%C3%A9-roberto-machado-brandt-1a424460',
+          'NOTE:Crio sites e sistemas que ajudam pequenos negócios a atrair e reter mais clientes.',
+          'REV:' + new Date().toISOString().replace(/[:.-]/g, '').slice(0, 15) + 'Z',
+          'END:VCARD'
+        ].join('\r\n');
+
+        const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8' });
         const file = new File([blob], fileName, { type: 'text/vcard' });
+        
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({
             files: [file],
@@ -83,22 +84,10 @@ export default function App() {
       }
     }
 
-    // 2. Fallback for iOS (Direct Blob Navigation)
-    if (isIOS) {
-      const url = window.URL.createObjectURL(blob);
-      window.location.assign(url);
-      return;
-    }
-
-    // 3. Fallback for Android/Desktop (Download Link)
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', fileName);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    setTimeout(() => window.URL.revokeObjectURL(url), 100);
+    // 2. Fallback for ALL platforms (Server-side API)
+    // Using a real URL is the only 100% reliable way to handle downloads 
+    // in all mobile environments (including Instagram/Facebook webviews).
+    window.location.href = '/api/save-contact';
   };
 
   return (
