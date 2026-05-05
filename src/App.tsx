@@ -78,12 +78,12 @@ END:VCARD`;
       <div className="fixed bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-accent/5 blur-[150px]" />
 
       {/* Main Content Container */}
-      <div className="relative z-10 w-full min-h-screen py-12 px-4 flex flex-col items-center">
+      <div className="relative z-10 w-full min-h-screen py-8 px-4 flex flex-col items-center justify-center">
         <motion.main 
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="w-full max-w-[400px] flex flex-col gap-8 bg-white/[0.03] backdrop-blur-md border border-white/10 p-8 rounded-[40px] shadow-2xl"
+          className="w-[95%] max-w-[400px] flex flex-col gap-8 bg-white/[0.05] backdrop-blur-xl border border-white/20 p-6 sm:p-8 rounded-[40px] shadow-2xl my-4"
           id="main-card"
         >
           {/* 1. Header Section */}
