@@ -41,29 +41,69 @@ export default function App() {
     visible: { opacity: 1, y: 0 }
   };
 
-  const handleSaveContact = () => {
-    const vCard = `BEGIN:VCARD
-VERSION:3.0
-FN:Roberto Brandt
-N:Brandt;Roberto;;;
-TEL;TYPE=CELL:+5521980914107
-EMAIL;TYPE=INTERNET:jrmacbrandt@yahoo.com
-URL:https://portfolio-roberto-five.vercel.app/
-ORG:J.R. Brandt Web Design
-TITLE:Webdesigner & Developer
-NOTE:Crio sites e sistemas que ajudam pequenos negócios a atrair e reter mais clientes.
-END:VCARD`;
+  const handleSaveContact = async () => {
+    const vCardData = [
+      'BEGIN:VCARD',
+      'VERSION:3.0',
+      'FN:Roberto Brandt',
+      'N:Brandt;Roberto;;;',
+      'ORG:J.R. Brandt Web Design',
+      'TITLE:Webdesigner & Developer',
+      'TEL;TYPE=CELL,PREF:+5521980914107',
+      'EMAIL;TYPE=INTERNET,WORK:jrmacbrandt@yahoo.com',
+      'URL:https://portfolio-roberto-five.vercel.app/',
+      'X-SOCIALPROFILE;TYPE=instagram:https://www.instagram.com/jrbrandt.webdesigner/',
+      'X-SOCIALPROFILE;TYPE=linkedin:https://www.linkedin.com/in/jos%C3%A9-roberto-machado-brandt-1a424460',
+      'NOTE:Crio sites e sistemas que ajudam pequenos negócios a atrair e reter mais clientes.',
+      'REV:' + new Date().toISOString().replace(/[:.-]/g, ''),
+      'END:VCARD'
+    ].join('\r\n');
 
-    const blob = new Blob([vCard], { type: 'text/vcard;charset=utf-8' });
+    const fileName = 'Roberto_Brandt.vcf';
+    const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8' });
+
+    // Detection
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    // 1. Try Web Share API (Best experience on modern Mobile)
+    if (isMobile && navigator.share) {
+      try {
+        const file = new File([blob], fileName, { type: 'text/vcard' });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: 'Roberto Brandt',
+            text: 'Salvar contato de Roberto Brandt'
+          });
+          return; // Success
+        }
+      } catch (error) {
+        console.error('Erro ao compartilhar:', error);
+      }
+    }
+
+    // 2. Fallback for iOS Safari (Data URI)
+    if (isIOS) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const link = document.createElement('a');
+        link.href = reader.result as string;
+        link.setAttribute('download', fileName);
+        link.click();
+      };
+      reader.readAsDataURL(blob);
+      return;
+    }
+
+    // 3. Fallback for Android/Desktop (Blob URL)
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'Roberto_Brandt.vcf');
+    link.setAttribute('download', fileName);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    
-    // Cleanup to prevent memory leaks
     setTimeout(() => window.URL.revokeObjectURL(url), 100);
   };
 
