@@ -54,10 +54,10 @@ export default function App() {
         const vCardData = [
           'BEGIN:VCARD',
           'VERSION:2.1',
-          'FN:Roberto Brandt',
-          'N:Brandt;Roberto',
-          'ORG:J.R. Brandt Web Design',
-          'TITLE:Webdesigner & Developer',
+          'FN:J. Roberto Brandt',
+          'N:Brandt;J. Roberto',
+          'ORG:Webdesigner & Developer - J. Roberto Brandt',
+          'TITLE:Webdesigner & Developer - J. Roberto Brandt',
           'TEL;CELL;PREF:+5521980914107',
           'EMAIL;INTERNET;WORK:jrmacbrandt@yahoo.com',
           'URL:https://portfolio-roberto-five.vercel.app/',
@@ -73,8 +73,8 @@ export default function App() {
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({
             files: [file],
-            title: 'Roberto Brandt',
-            text: 'Salvar contato de Roberto Brandt'
+            title: 'J. Roberto Brandt',
+            text: 'Salvar contato de J. Roberto Brandt'
           });
           return;
         }
@@ -113,7 +113,7 @@ export default function App() {
               <div className="w-40 h-40 rounded-full border border-white/10 p-1 bg-black shadow-[0_0_40px_rgba(255,0,0,0.1)]">
                 <img 
                   src="/jrbrandt-foto.png" 
-                  alt="Roberto Brandt"
+                  alt="J. Roberto Brandt"
                   className="w-full h-full rounded-full object-cover grayscale brightness-90 contrast-125"
                 />
               </div>
