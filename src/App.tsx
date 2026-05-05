@@ -48,28 +48,28 @@ export default function App() {
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || isIOS;
 
+    const vCardData = [
+      'BEGIN:VCARD',
+      'VERSION:3.0',
+      'FN:Roberto Brandt',
+      'N:Brandt;Roberto;;;',
+      'ORG:J.R. Brandt Web Design',
+      'TITLE:Webdesigner & Developer',
+      'TEL;TYPE=CELL,PREF:+5521980914107',
+      'EMAIL;TYPE=INTERNET,WORK:jrmacbrandt@yahoo.com',
+      'URL:https://portfolio-roberto-five.vercel.app/',
+      'X-SOCIALPROFILE;TYPE=instagram:https://www.instagram.com/jrbrandt.webdesigner/',
+      'X-SOCIALPROFILE;TYPE=linkedin:https://www.linkedin.com/in/jos%C3%A9-roberto-machado-brandt-1a424460',
+      'NOTE:Crio sites e sistemas que ajudam pequenos negócios a atrair e reter mais clientes.',
+      'REV:' + new Date().toISOString().replace(/[:.-]/g, '').slice(0, 15) + 'Z',
+      'END:VCARD'
+    ].join('\r\n');
+
     // 1. Try Web Share API (Best experience on modern Mobile)
     if (isMobile && navigator.share) {
       try {
-        const vCardData = [
-          'BEGIN:VCARD',
-          'VERSION:3.0',
-          'FN:Roberto Brandt',
-          'N:Brandt;Roberto;;;',
-          'ORG:J.R. Brandt Web Design',
-          'TITLE:Webdesigner & Developer',
-          'TEL;TYPE=CELL,PREF:+5521980914107',
-          'EMAIL;TYPE=INTERNET,WORK:jrmacbrandt@yahoo.com',
-          'URL:https://portfolio-roberto-five.vercel.app/',
-          'X-SOCIALPROFILE;TYPE=instagram:https://www.instagram.com/jrbrandt.webdesigner/',
-          'X-SOCIALPROFILE;TYPE=linkedin:https://www.linkedin.com/in/jos%C3%A9-roberto-machado-brandt-1a424460',
-          'NOTE:Crio sites e sistemas que ajudam pequenos negócios a atrair e reter mais clientes.',
-          'REV:' + new Date().toISOString().replace(/[:.-]/g, '').slice(0, 15) + 'Z',
-          'END:VCARD'
-        ].join('\r\n');
-
-        const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8' });
-        const file = new File([blob], fileName, { type: 'text/vcard' });
+        const blob = new Blob([vCardData], { type: 'text/x-vcard' });
+        const file = new File([blob], fileName, { type: 'text/x-vcard' });
         
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({
@@ -84,9 +84,18 @@ export default function App() {
       }
     }
 
-    // 2. Fallback for ALL platforms (Server-side API)
-    // Using a real URL is the only 100% reliable way to handle downloads 
-    // in all mobile environments (including Instagram/Facebook webviews).
+    // 2. Fallback for Android (Try Data URI first to trigger direct open)
+    if (!isIOS && isMobile) {
+      try {
+        const b64 = btoa(unescape(encodeURIComponent(vCardData)));
+        window.location.href = `data:text/x-vcard;base64,${b64}`;
+        return;
+      } catch (e) {
+        console.error('Data URI fallback failed', e);
+      }
+    }
+
+    // 3. Last Resort Fallback (Server-side API)
     window.location.href = '/api/save-contact';
   };
 

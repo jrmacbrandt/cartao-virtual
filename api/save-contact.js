@@ -16,7 +16,7 @@ export default function handler(req, res) {
     'END:VCARD'
   ].join('\r\n');
 
-  res.setHeader('Content-Type', 'text/vcard; charset=utf-8');
+  res.setHeader('Content-Type', 'text/x-vcard');
   res.setHeader('Content-Disposition', 'inline; filename="JRoberto_Brandt.vcf"');
   res.status(200).send(vCardData);
 }
