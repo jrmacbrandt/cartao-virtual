@@ -168,8 +168,16 @@ END:VCARD`;
           {/* 6. Social Section */}
           <motion.section variants={itemVariants} className="flex flex-col items-center gap-8 mt-4">
             <div className="flex gap-8">
-              <SocialIcon icon={<Instagram className="w-5 h-5" />} href="https://www.instagram.com/jrbrandt.webdesigner/" />
-              <SocialIcon icon={<Linkedin className="w-5 h-5" />} href="https://www.linkedin.com/in/josé-roberto-machado-brandt-1a424460" />
+              <SocialIcon
+                icon={<Instagram className="w-5 h-5" />}
+                href="https://www.instagram.com/jrbrandt.webdesigner/"
+                mobileHref="instagram://user?username=jrbrandt.webdesigner"
+              />
+              <SocialIcon
+                icon={<Linkedin className="w-5 h-5" />}
+                href="https://www.linkedin.com/in/jos%C3%A9-roberto-machado-brandt-1a424460"
+                mobileHref="linkedin://profile/jos%C3%A9-roberto-machado-brandt-1a424460"
+              />
               <SocialIcon icon={<Facebook className="w-5 h-5" />} />
             </div>
           </motion.section>
@@ -197,7 +205,11 @@ function ActionButton({ icon, label, href }: { icon: React.ReactNode, label: str
   );
 }
 
-function SocialIcon({ icon, href }: { icon: React.ReactNode, href?: string }) {
+function isMobile(): boolean {
+  return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+}
+
+function SocialIcon({ icon, href, mobileHref }: { icon: React.ReactNode, href?: string, mobileHref?: string }) {
   if (!href) {
     return (
       <div className="text-white/20 p-3 border border-white/10 rounded-full transition-all cursor-not-allowed">
@@ -206,11 +218,25 @@ function SocialIcon({ icon, href }: { icon: React.ReactNode, href?: string }) {
     );
   }
 
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (mobileHref && isMobile()) {
+      e.preventDefault();
+      // Tenta abrir o app nativo; se não tiver instalado, cai para o link web
+      const timeout = setTimeout(() => {
+        window.open(href, '_blank');
+      }, 1500);
+      window.location.href = mobileHref;
+      // Se o app abrir, cancela o fallback
+      window.addEventListener('blur', () => clearTimeout(timeout), { once: true });
+    }
+  };
+
   return (
-    <motion.a 
-      href={href}
-      target="_blank"
+    <motion.a
+      href={isMobile() && mobileHref ? mobileHref : href}
+      target={isMobile() && mobileHref ? '_self' : '_blank'}
       rel="noopener noreferrer"
+      onClick={handleClick}
       whileHover={{ scale: 1.1, color: 'var(--color-accent)', borderColor: 'var(--color-accent)' }}
       className="text-white p-3 border border-white/10 rounded-full transition-all"
     >
