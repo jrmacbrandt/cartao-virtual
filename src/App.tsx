@@ -55,7 +55,7 @@ export default function App() {
       'X-SOCIALPROFILE;TYPE=instagram:https://www.instagram.com/jrbrandt.webdesigner/',
       'X-SOCIALPROFILE;TYPE=linkedin:https://www.linkedin.com/in/jos%C3%A9-roberto-machado-brandt-1a424460',
       'NOTE:Crio sites e sistemas que ajudam pequenos negócios a atrair e reter mais clientes.',
-      'REV:' + new Date().toISOString().replace(/[:.-]/g, ''),
+      'REV:' + new Date().toISOString().replace(/[:.-]/g, '').slice(0, 15) + 'Z',
       'END:VCARD'
     ].join('\r\n');
 
@@ -63,8 +63,8 @@ export default function App() {
     const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8' });
 
     // Detection
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || isIOS;
 
     // 1. Try Web Share API (Best experience on modern Mobile)
     if (isMobile && navigator.share) {
@@ -76,27 +76,21 @@ export default function App() {
             title: 'Roberto Brandt',
             text: 'Salvar contato de Roberto Brandt'
           });
-          return; // Success
+          return;
         }
       } catch (error) {
         console.error('Erro ao compartilhar:', error);
       }
     }
 
-    // 2. Fallback for iOS Safari (Data URI)
+    // 2. Fallback for iOS (Direct Blob Navigation)
     if (isIOS) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const link = document.createElement('a');
-        link.href = reader.result as string;
-        link.setAttribute('download', fileName);
-        link.click();
-      };
-      reader.readAsDataURL(blob);
+      const url = window.URL.createObjectURL(blob);
+      window.location.assign(url);
       return;
     }
 
-    // 3. Fallback for Android/Desktop (Blob URL)
+    // 3. Fallback for Android/Desktop (Download Link)
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
