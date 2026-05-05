@@ -83,10 +83,8 @@ export default function App() {
       }
     }
 
-    // 2. Fallback (Server-side API)
-    // Direct navigation to a real URL is the only 100% stable way 
-    // to handle files in all mobile environments.
-    window.location.href = '/api/save-contact';
+    // 2. Fallback (Server-side API via static-looking URL)
+    window.location.href = '/JRoberto_Brandt.vcf';
   };
 
   return (
@@ -174,16 +172,28 @@ export default function App() {
           </motion.button>
 
           {/* 5. Save Contact Button Highlighted */}
-          <motion.button 
+          <motion.a 
             variants={itemVariants}
             whileHover={{ scale: 1.02, backgroundColor: '#d10000' }}
             whileTap={{ scale: 0.98 }}
-            onClick={handleSaveContact}
-            className="w-full bg-accent text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 shadow-xl transition-all duration-300 tracking-[0.2em] text-[10px] uppercase"
+            href="/JRoberto_Brandt.vcf"
+            download="JRoberto_Brandt.vcf"
+            type="text/x-vcard"
+            onClick={(e) => {
+              // Try Share API first if supported, as it's the most native experience
+              const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+              const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || isIOS;
+              
+              if (isMobile && navigator.share) {
+                e.preventDefault();
+                handleSaveContact();
+              }
+            }}
+            className="w-full bg-accent text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 shadow-xl transition-all duration-300 tracking-[0.2em] text-[10px] uppercase cursor-pointer"
           >
             <UserPlus className="w-3 h-3" />
             <span>Salvar contato agora</span>
-          </motion.button>
+          </motion.a>
 
           {/* 6. Social Section */}
           <motion.section variants={itemVariants} className="flex flex-col items-center gap-8 mt-4">

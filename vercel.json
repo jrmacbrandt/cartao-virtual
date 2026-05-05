@@ -1,0 +1,23 @@
+{
+  "headers": [
+    {
+      "source": "/(.*).vcf",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/x-vcard; charset=utf-8"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "inline; filename=JRoberto_Brandt.vcf"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/JRoberto_Brandt.vcf",
+      "destination": "/api/save-contact"
+    }
+  ]
+}
