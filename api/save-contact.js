@@ -4,7 +4,7 @@ export default function handler(req, res) {
     'VERSION:2.1',
     'FN:J. Roberto Brandt',
     'N:Brandt;J. Roberto',
-    'ORG:Webdesigner & Developer - J. Roberto Brandt',
+    'ORG:',
     'TITLE:Webdesigner & Developer - J. Roberto Brandt',
     'TEL;CELL;PREF:+5521980914107',
     'EMAIL;INTERNET;WORK:jrmacbrandt@yahoo.com',
