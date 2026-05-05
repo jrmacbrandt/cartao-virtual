@@ -83,7 +83,7 @@ END:VCARD`;
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="w-full max-w-[400px] flex flex-col gap-8"
+          className="w-full max-w-[400px] flex flex-col gap-8 bg-white/[0.03] backdrop-blur-md border border-white/10 p-8 rounded-[40px] shadow-2xl"
           id="main-card"
         >
           {/* 1. Header Section */}
