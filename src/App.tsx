@@ -101,7 +101,7 @@ END:VCARD`;
             
             <div className="space-y-6 px-2">
               <h1 className="text-3xl font-extrabold tracking-tight leading-tight uppercase text-white">
-                Seu negócio merece mais do que apenas redes sociais: construa uma <span className="text-accent">estrutura própria</span> para crescer.
+                Seu negócio merece mais do que apenas redes sociais <span className="text-accent">ou plataformas de terceiros.</span>
               </h1>
               <p className="text-white/60 text-base leading-relaxed font-medium">
                 Como Webdesigner, crio sites e sistemas sob medida para ajudar pequenos negócios a atrair e reter mais clientes qualificados.
