@@ -91,10 +91,9 @@ END:VCARD`;
             <div className="relative">
               <div className="w-32 h-32 rounded-full border border-white/10 p-1 bg-black shadow-[0_0_40px_rgba(255,0,0,0.1)]">
                 <img 
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2574&auto=format&fit=crop" 
+                  src="/jrbrandt-foto.png" 
                   alt="Roberto Brandt"
                   className="w-full h-full rounded-full object-cover grayscale brightness-90 contrast-125"
-                  referrerPolicy="no-referrer"
                 />
               </div>
               <div className="absolute top-2 right-2 bg-accent w-3 h-3 rounded-full border-2 border-black" />
