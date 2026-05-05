@@ -19,8 +19,7 @@ import {
   Instagram, 
   Linkedin, 
   Facebook, 
-  ChevronRight,
-  ExternalLink
+  ChevronRight
 } from 'lucide-react';
 
 export default function App() {
@@ -118,7 +117,6 @@ END:VCARD`;
             id="main-cta-btn"
           >
             <span>QUERO DESTACAR MEU NEGÓCIO</span>
-            <ExternalLink className="w-4 h-4" />
           </motion.button>
 
           {/* 3. Action Grid */}
