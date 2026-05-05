@@ -60,7 +60,7 @@ export default function App() {
           'TITLE:Webdesigner & Developer - J. Roberto Brandt',
           'TEL;CELL;PREF:+5521980914107',
           'EMAIL;INTERNET;WORK:jrmacbrandt@yahoo.com',
-          'URL:https://portfolio-roberto-five.vercel.app/',
+          'URL:https://portfolio-jrbrandt.vercel.app/',
           'X-SOCIALPROFILE;TYPE=instagram:https://www.instagram.com/jrbrandt.webdesigner/',
           'X-SOCIALPROFILE;TYPE=linkedin:https://www.linkedin.com/in/jos%C3%A9-roberto-machado-brandt-1a424460',
           'NOTE:Crio sites e sistemas que ajudam pequenos negócios a atrair e reter mais clientes.',
@@ -149,7 +149,7 @@ export default function App() {
             <ActionButton 
               icon={<Globe className="w-4 h-4" />} 
               label="Website" 
-              href="https://portfolio-roberto-five.vercel.app/"
+              href="https://portfolio-jrbrandt.vercel.app/"
             />
             <ActionButton 
               icon={<Mail className="w-4 h-4" />} 
@@ -163,7 +163,7 @@ export default function App() {
             variants={itemVariants}
             whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,0.05)' }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => window.open('https://portfolio-roberto-five.vercel.app/', '_blank')}
+            onClick={() => window.open('https://portfolio-jrbrandt.vercel.app/', '_blank')}
             className="w-full border border-white/20 text-white font-bold py-4 rounded-none flex items-center justify-center gap-3 transition-all duration-300 tracking-[0.1em] text-[10px] uppercase"
             id="solutions-btn"
           >
