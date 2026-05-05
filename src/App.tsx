@@ -42,7 +42,7 @@ export default function App() {
   };
 
   const handleSaveContact = async () => {
-    const fileName = 'Roberto_Brandt.vcf';
+    const fileName = 'JRoberto_Brandt.vcf';
     
     // Detection
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
