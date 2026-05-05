@@ -171,7 +171,7 @@ END:VCARD`;
             <div className="flex gap-8">
               <SocialIcon icon={<Instagram className="w-5 h-5" />} href="https://www.instagram.com/jrbrandt.webdesigner/" />
               <SocialIcon icon={<Linkedin className="w-5 h-5" />} href="https://www.linkedin.com/in/josé-roberto-machado-brandt-1a424460" />
-              <SocialIcon icon={<Facebook className="w-5 h-5" />} href="#" />
+              <SocialIcon icon={<Facebook className="w-5 h-5" />} />
             </div>
           </motion.section>
         </motion.main>
@@ -198,10 +198,20 @@ function ActionButton({ icon, label, href }: { icon: React.ReactNode, label: str
   );
 }
 
-function SocialIcon({ icon, href }: { icon: React.ReactNode, href: string }) {
+function SocialIcon({ icon, href }: { icon: React.ReactNode, href?: string }) {
+  if (!href) {
+    return (
+      <div className="text-white/20 p-3 border border-white/10 rounded-full transition-all cursor-not-allowed">
+        {icon}
+      </div>
+    );
+  }
+
   return (
     <motion.a 
       href={href}
+      target="_blank"
+      rel="noopener noreferrer"
       whileHover={{ scale: 1.1, color: 'var(--color-accent)', borderColor: 'var(--color-accent)' }}
       className="text-white p-3 border border-white/10 rounded-full transition-all"
     >
