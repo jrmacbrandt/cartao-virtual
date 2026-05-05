@@ -136,7 +136,7 @@ export default function App() {
             className="w-full bg-accent text-white font-black py-5 rounded-none flex items-center justify-center gap-3 shadow-2xl transition-all duration-300 tracking-[0.1em] text-sm uppercase"
             id="main-cta-btn"
           >
-            <span>QUERO DESTACAR MEU NEGÓCIO</span>
+            <span>QUERO MAIS CLIENTES AGORA</span>
           </motion.button>
 
           {/* 3. Action Grid */}
