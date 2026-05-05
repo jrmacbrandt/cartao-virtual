@@ -83,7 +83,7 @@ END:VCARD`;
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="w-[95%] max-w-[400px] flex flex-col gap-8 bg-white/[0.05] backdrop-blur-xl border border-white/20 p-6 sm:p-8 rounded-[40px] shadow-2xl my-4"
+          className="w-[95%] max-w-[400px] flex flex-col gap-8 bg-white/[0.08] backdrop-blur-2xl border border-white/20 p-6 sm:p-8 rounded-[40px] shadow-2xl my-4"
           id="main-card"
         >
           {/* 1. Header Section */}
@@ -96,7 +96,6 @@ END:VCARD`;
                   className="w-full h-full rounded-full object-cover grayscale brightness-90 contrast-125"
                 />
               </div>
-              <div className="absolute top-2 right-2 bg-accent w-3 h-3 rounded-full border-2 border-black" />
             </div>
             
             <div className="space-y-6 px-2">
