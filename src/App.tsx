@@ -23,6 +23,22 @@ import {
 } from 'lucide-react';
 
 export default function App() {
+  const handleExternalLink = (e: React.MouseEvent, url: string) => {
+    const ua = navigator.userAgent || navigator.vendor || (window as any).opera;
+    const isInstagram = ua.indexOf('Instagram') > -1;
+    const isFacebook = (ua.indexOf('FBAN') > -1) || (ua.indexOf('FBAV') > -1);
+    const isAndroid = /Android/i.test(ua);
+
+    // No Android, usamos o esquema 'intent://' para forçar a abertura no navegador do sistema
+    if ((isInstagram || isFacebook) && isAndroid && url.startsWith('http')) {
+      e.preventDefault();
+      const cleanUrl = url.replace(/^https?:\/\//, '');
+      window.location.href = `intent://${cleanUrl}#Intent;scheme=https;action=android.intent.action.VIEW;end`;
+    }
+    // No iOS, não existe um método direto 100% confiável para forçar o Safari, 
+    // então mantemos o comportamento padrão ou abrimos via window.open.
+  };
+
   const containerVariants = {
     hidden: { opacity: 0, scale: 0.95 },
     visible: { 
@@ -132,7 +148,10 @@ export default function App() {
             variants={itemVariants}
             whileHover={{ scale: 1.02, backgroundColor: '#d10000' }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => window.open('https://wa.me/5521980914107', '_blank')}
+            onClick={(e) => {
+              handleExternalLink(e, 'https://wa.me/5521980914107');
+              if (!e.defaultPrevented) window.open('https://wa.me/5521980914107', '_blank');
+            }}
             className="w-full bg-accent text-white font-black py-5 rounded-none flex items-center justify-center gap-3 shadow-2xl transition-all duration-300 tracking-[0.1em] text-sm uppercase"
             id="main-cta-btn"
           >
@@ -145,11 +164,13 @@ export default function App() {
               icon={<MessageCircle className="w-4 h-4" />} 
               label="WhatsApp" 
               href="https://wa.me/5521980914107"
+              onLinkClick={handleExternalLink}
             />
             <ActionButton 
               icon={<Globe className="w-4 h-4" />} 
               label="Website" 
               href="https://portfolio-jrbrandt.vercel.app/"
+              onLinkClick={handleExternalLink}
             />
             <ActionButton 
               icon={<Mail className="w-4 h-4" />} 
@@ -163,7 +184,10 @@ export default function App() {
             variants={itemVariants}
             whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,0.05)' }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => window.open('https://portfolio-jrbrandt.vercel.app/', '_blank')}
+            onClick={(e) => {
+              handleExternalLink(e, 'https://portfolio-jrbrandt.vercel.app/');
+              if (!e.defaultPrevented) window.open('https://portfolio-jrbrandt.vercel.app/', '_blank');
+            }}
             className="w-full border border-white/20 text-white font-bold py-4 rounded-none flex items-center justify-center gap-3 transition-all duration-300 tracking-[0.1em] text-[10px] uppercase"
             id="solutions-btn"
           >
@@ -217,10 +241,16 @@ export default function App() {
   );
 }
 
-function ActionButton({ icon, label, href }: { icon: React.ReactNode, label: string, href: string }) {
+function ActionButton({ icon, label, href, onLinkClick }: { 
+  icon: React.ReactNode, 
+  label: string, 
+  href: string,
+  onLinkClick?: (e: React.MouseEvent, url: string) => void
+}) {
   return (
     <motion.a
       href={href}
+      onClick={(e) => onLinkClick?.(e, href)}
       target="_blank"
       rel="noopener noreferrer"
       whileHover={{ scale: 1.03, borderColor: 'rgba(255,0,0,0.4)', backgroundColor: 'rgba(255,0,0,0.02)' }}
