@@ -23,18 +23,23 @@ import {
 } from 'lucide-react';
 
 export default function App() {
-  const handleExternalLink = (e: React.MouseEvent, url: string) => {
-    const ua = navigator.userAgent || navigator.vendor || (window as any).opera;
-    const isInstagram = /Instagram/i.test(ua);
-    const isFacebook = /FBAN|FBAV/i.test(ua);
+  // Detecta se está no navegador interno do Instagram/Facebook no Android
+  const ua = typeof navigator !== 'undefined' ? (navigator.userAgent || navigator.vendor || '') : '';
+  const isInstagramAndroid = /Instagram|FBAN|FBAV/i.test(ua) && /Android/i.test(ua);
 
-    if ((isInstagram || isFacebook) && url.startsWith('http')) {
-      e.preventDefault();
-      // Usamos nossa API "Bridge" que força a saída do navegador interno
-      // através de headers de download (Content-Disposition: attachment)
-      window.location.href = `/api/open?url=${encodeURIComponent(url)}`;
+  // Gera o href correto para o website:
+  // No Android+Instagram, usa intent:// DIRETO no href (único método que o Instagram respeita)
+  // Em qualquer outro ambiente, usa o link HTTPS normal
+  const getWebsiteHref = (url: string): string => {
+    if (isInstagramAndroid) {
+      const clean = url.replace(/^https?:\/\//, '');
+      return `intent://${clean}#Intent;scheme=https;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;S.browser_fallback_url=${encodeURIComponent(url)};end`;
     }
+    return url;
   };
+
+  const websiteHref = getWebsiteHref('https://portfolio-jrbrandt.vercel.app/');
+  const whatsappHref = getWebsiteHref('https://wa.me/5521980914107');
 
   const containerVariants = {
     hidden: { opacity: 0, scale: 0.95 },
@@ -141,33 +146,32 @@ export default function App() {
           </motion.section>
 
           {/* 2. Main CTA */}
-          <motion.button 
+          <motion.a
             variants={itemVariants}
+            href={whatsappHref}
+            target={isInstagramAndroid ? '_self' : '_blank'}
+            rel="noopener noreferrer"
             whileHover={{ scale: 1.02, backgroundColor: '#d10000' }}
             whileTap={{ scale: 0.98 }}
-            onClick={(e) => {
-              handleExternalLink(e, 'https://wa.me/5521980914107');
-              if (!e.defaultPrevented) window.open('https://wa.me/5521980914107', '_blank');
-            }}
             className="w-full bg-accent text-white font-black py-5 rounded-none flex items-center justify-center gap-3 shadow-2xl transition-all duration-300 tracking-[0.1em] text-sm uppercase"
             id="main-cta-btn"
           >
             <span>QUERO MAIS CLIENTES AGORA</span>
-          </motion.button>
+          </motion.a>
 
           {/* 3. Action Grid */}
           <motion.section variants={itemVariants} className="grid grid-cols-3 gap-2">
             <ActionButton 
               icon={<MessageCircle className="w-4 h-4" />} 
               label="WhatsApp" 
-              href="https://wa.me/5521980914107"
-              onLinkClick={handleExternalLink}
+              href={whatsappHref}
+              external={isInstagramAndroid}
             />
             <ActionButton 
               icon={<Globe className="w-4 h-4" />} 
               label="Website" 
-              href="https://portfolio-jrbrandt.vercel.app/"
-              onLinkClick={handleExternalLink}
+              href={websiteHref}
+              external={isInstagramAndroid}
             />
             <ActionButton 
               icon={<Mail className="w-4 h-4" />} 
@@ -177,20 +181,19 @@ export default function App() {
           </motion.section>
 
           {/* 4. Secondary Action */}
-          <motion.button 
+          <motion.a
             variants={itemVariants}
+            href={websiteHref}
+            target={isInstagramAndroid ? '_self' : '_blank'}
+            rel="noopener noreferrer"
             whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,0.05)' }}
             whileTap={{ scale: 0.98 }}
-            onClick={(e) => {
-              handleExternalLink(e, 'https://portfolio-jrbrandt.vercel.app/');
-              if (!e.defaultPrevented) window.open('https://portfolio-jrbrandt.vercel.app/', '_blank');
-            }}
             className="w-full border border-white/20 text-white font-bold py-4 rounded-none flex items-center justify-center gap-3 transition-all duration-300 tracking-[0.1em] text-[10px] uppercase"
             id="solutions-btn"
           >
             <span>VER SOLUÇÕES</span>
             <ChevronRight className="w-3 h-3" />
-          </motion.button>
+          </motion.a>
 
           {/* 5. Save Contact Button Highlighted */}
           <motion.a 
@@ -238,17 +241,16 @@ export default function App() {
   );
 }
 
-function ActionButton({ icon, label, href, onLinkClick }: { 
+function ActionButton({ icon, label, href, external }: { 
   icon: React.ReactNode, 
   label: string, 
   href: string,
-  onLinkClick?: (e: React.MouseEvent, url: string) => void
+  external?: boolean
 }) {
   return (
     <motion.a
       href={href}
-      onClick={(e) => onLinkClick?.(e, href)}
-      target="_blank"
+      target={external ? '_self' : '_blank'}
       rel="noopener noreferrer"
       whileHover={{ scale: 1.03, borderColor: 'rgba(255,0,0,0.4)', backgroundColor: 'rgba(255,0,0,0.02)' }}
       whileTap={{ scale: 0.97 }}
