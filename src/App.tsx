@@ -23,23 +23,13 @@ import {
 } from 'lucide-react';
 
 export default function App() {
-  // Detecta se está no navegador interno do Instagram/Facebook no Android
   const ua = typeof navigator !== 'undefined' ? (navigator.userAgent || navigator.vendor || '') : '';
-  const isInstagramAndroid = /Instagram|FBAN|FBAV/i.test(ua) && /Android/i.test(ua);
+  const isInAppBrowser = /Instagram|FBAN|FBAV/i.test(ua);
+  const [bannerDismissed, setBannerDismissed] = React.useState(false);
+  const showBanner = isInAppBrowser && !bannerDismissed;
 
-  // Gera o href correto para o website:
-  // No Android+Instagram, usa intent:// DIRETO no href (único método que o Instagram respeita)
-  // Em qualquer outro ambiente, usa o link HTTPS normal
-  const getWebsiteHref = (url: string): string => {
-    if (isInstagramAndroid) {
-      const clean = url.replace(/^https?:\/\//, '');
-      return `intent://${clean}#Intent;scheme=https;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;S.browser_fallback_url=${encodeURIComponent(url)};end`;
-    }
-    return url;
-  };
-
-  const websiteHref = getWebsiteHref('https://portfolio-jrbrandt.vercel.app/');
-  const whatsappHref = getWebsiteHref('https://wa.me/5521980914107');
+  const websiteHref = 'https://portfolio-jrbrandt.vercel.app/';
+  const whatsappHref = 'https://wa.me/5521980914107';
 
   const containerVariants = {
     hidden: { opacity: 0, scale: 0.95 },
@@ -116,6 +106,37 @@ export default function App() {
 
       {/* Main Content Container */}
       <div className="relative z-10 w-full min-h-screen py-8 px-4 flex flex-col items-center justify-center">
+
+        {/* Banner: Abrir no Navegador (aparece apenas dentro do Instagram) */}
+        <AnimatePresence>
+          {showBanner && (
+            <motion.div
+              initial={{ opacity: 0, y: -80 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -80 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              className="fixed top-0 left-0 right-0 z-50 bg-black border-b border-accent/40 shadow-2xl"
+            >
+              <div className="flex items-start gap-3 p-4">
+                <div className="flex-1">
+                  <p className="text-white font-black text-xs uppercase tracking-widest mb-1">Para melhor experiência</p>
+                  <p className="text-white/70 text-[11px] leading-snug">
+                    Toque nos <span className="text-white font-bold">3 pontos</span> no canto superior direito
+                    {' '}&rarr;{' '}<span className="text-accent font-bold">"Abrir no Chrome"</span>
+                  </p>
+                </div>
+                <button
+                  onClick={() => setBannerDismissed(true)}
+                  className="text-white/40 hover:text-white mt-0.5 p-1 flex-shrink-0"
+                  aria-label="Fechar aviso"
+                >
+                  <span className="text-lg leading-none">&times;</span>
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         <motion.main 
           variants={containerVariants}
           initial="hidden"
@@ -149,7 +170,7 @@ export default function App() {
           <motion.a
             variants={itemVariants}
             href={whatsappHref}
-            target={isInstagramAndroid ? '_self' : '_blank'}
+            target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.02, backgroundColor: '#d10000' }}
             whileTap={{ scale: 0.98 }}
@@ -165,13 +186,11 @@ export default function App() {
               icon={<MessageCircle className="w-4 h-4" />} 
               label="WhatsApp" 
               href={whatsappHref}
-              external={isInstagramAndroid}
             />
             <ActionButton 
               icon={<Globe className="w-4 h-4" />} 
               label="Website" 
               href={websiteHref}
-              external={isInstagramAndroid}
             />
             <ActionButton 
               icon={<Mail className="w-4 h-4" />} 
@@ -184,7 +203,7 @@ export default function App() {
           <motion.a
             variants={itemVariants}
             href={websiteHref}
-            target={isInstagramAndroid ? '_self' : '_blank'}
+            target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,0.05)' }}
             whileTap={{ scale: 0.98 }}
@@ -241,16 +260,15 @@ export default function App() {
   );
 }
 
-function ActionButton({ icon, label, href, external }: { 
+function ActionButton({ icon, label, href }: { 
   icon: React.ReactNode, 
   label: string, 
-  href: string,
-  external?: boolean
+  href: string
 }) {
   return (
     <motion.a
       href={href}
-      target={external ? '_self' : '_blank'}
+      target="_blank"
       rel="noopener noreferrer"
       whileHover={{ scale: 1.03, borderColor: 'rgba(255,0,0,0.4)', backgroundColor: 'rgba(255,0,0,0.02)' }}
       whileTap={{ scale: 0.97 }}
