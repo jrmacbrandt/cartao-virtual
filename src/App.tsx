@@ -25,15 +25,14 @@ import {
 export default function App() {
   const handleExternalLink = (e: React.MouseEvent, url: string) => {
     const ua = navigator.userAgent || navigator.vendor || (window as any).opera;
-    const isInstagram = ua.indexOf('Instagram') > -1;
-    const isFacebook = (ua.indexOf('FBAN') > -1) || (ua.indexOf('FBAV') > -1);
-    const isAndroid = /Android/i.test(ua);
+    const isInstagram = /Instagram/i.test(ua);
+    const isFacebook = /FBAN|FBAV/i.test(ua);
 
-    // No Android, usamos o esquema 'intent://' para forçar a abertura no navegador do sistema
-    if ((isInstagram || isFacebook) && isAndroid && url.startsWith('http')) {
+    if ((isInstagram || isFacebook) && url.startsWith('http')) {
       e.preventDefault();
-      const cleanUrl = url.replace(/^https?:\/\//, '');
-      window.location.href = `intent://${cleanUrl}#Intent;scheme=https;action=android.intent.action.VIEW;end`;
+      // Usamos nossa API "Bridge" que força a saída do navegador interno
+      // através de headers de download (Content-Disposition: attachment)
+      window.location.href = `/api/open?url=${encodeURIComponent(url)}`;
     }
   };
 
