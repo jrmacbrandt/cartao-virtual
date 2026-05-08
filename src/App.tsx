@@ -23,6 +23,26 @@ import {
 } from 'lucide-react';
 
 export default function App() {
+  const [isIOSInApp, setIsIOSInApp] = React.useState(false);
+
+  React.useEffect(() => {
+    const ua = navigator.userAgent || navigator.vendor || (window as any).opera;
+    const isInstagram = ua.indexOf('Instagram') > -1;
+    const isFacebook = (ua.indexOf('FBAN') > -1) || (ua.indexOf('FBAV') > -1);
+    const isAndroid = /Android/i.test(ua);
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+
+    // No Android, tentamos pular para o navegador do sistema imediatamente
+    if ((isInstagram || isFacebook) && isAndroid) {
+      const cleanUrl = window.location.href.replace(/^https?:\/\//, '');
+      window.location.href = `intent://${cleanUrl}#Intent;scheme=https;action=android.intent.action.VIEW;end`;
+    } 
+    // No iOS, não há como forçar, então mostramos um aviso elegante
+    else if ((isInstagram || isFacebook) && isIOS) {
+      setIsIOSInApp(true);
+    }
+  }, []);
+
   const handleExternalLink = (e: React.MouseEvent, url: string) => {
     const ua = navigator.userAgent || navigator.vendor || (window as any).opera;
     const isInstagram = ua.indexOf('Instagram') > -1;
@@ -114,6 +134,28 @@ export default function App() {
 
       {/* Main Content Container */}
       <div className="relative z-10 w-full min-h-screen py-8 px-4 flex flex-col items-center justify-center">
+        {/* iOS In-App Browser Notice */}
+        <AnimatePresence>
+          {isIOSInApp && (
+            <motion.div 
+              initial={{ opacity: 0, y: -50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -50 }}
+              className="fixed top-4 left-4 right-4 z-50 bg-accent p-4 rounded-2xl shadow-2xl border border-white/20 flex flex-col gap-2"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-white font-bold text-xs uppercase tracking-wider">🚀 Abrir no Safari</span>
+                <button onClick={() => setIsIOSInApp(false)} className="text-white/60 hover:text-white">
+                  <ChevronRight className="w-4 h-4 rotate-90" />
+                </button>
+              </div>
+              <p className="text-white/90 text-[10px] leading-tight font-medium">
+                Para uma experiência completa e salvar contatos, clique nos <span className="font-bold underline">três pontos (•••)</span> no topo e escolha <span className="font-bold">"Abrir no Navegador"</span>.
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         <motion.main 
           variants={containerVariants}
           initial="hidden"
